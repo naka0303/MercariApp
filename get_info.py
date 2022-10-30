@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
 import traceback
 import os
-import time
+import csv
 
 SLEEP_TIME = 20
 
@@ -12,8 +12,14 @@ try:
     # MercariAppのディレクトリパス
     app_path = os.getcwd()
 
+    # 出力先csv作成
+    path = './csv/test.csv'
+    f = open(path, 'w')
+    f.write('')
+    f.close()
+
     # chromedriverのパス格納
-    driver_path = fs.Service(executable_path=app_path + '/chromedriver')
+    driver_path = fs.Service(executable_path=app_path + '/driver/chromedriver')
 
     # Chromeインスタンス作成
     driver = webdriver.Chrome(service=driver_path)
@@ -26,7 +32,9 @@ try:
 
     # 販売状況
     # - 販売中 : status=on_sale
-    status = "status=on_sale"
+    # - 売り切れ : status=sold_out
+    status = "status=sold_out"
+
 
     # 並び替え
     # - 新しい順 : order=desc&sort=created_time
@@ -39,22 +47,26 @@ try:
     # メルカリ公式サイトを開く
     driver.get("https://jp.mercari.com/search?keyword=" + search_word1 + "%20" + search_word2 + "%20" + "&" + sort_order + "&" + status)
 
-    # 出品商品情報取得
+    ### 出品商品情報取得 ###
     driver.implicitly_wait(SLEEP_TIME)
     products = driver.find_element(By.XPATH, '//*[@id="item-grid"]/ul')
 
-    print(products)
-    print("a")
-
     driver.implicitly_wait(SLEEP_TIME)
-    products_div = products.find_element(By.TAG_NAME, 'div')
+    products_div = products.find_elements(By.TAG_NAME, 'div')
 
-    print("b")
+    # 商品ごとに商品名と価格を取得する
+    name_list = []
+    price_list = []
+    for product in products_div:
+        product_detail = product.find_element(By.TAG_NAME, 'mer-item-thumbnail')
+        name = product_detail.get_attribute('alt')
+        name_list.append(name)
+        price = product_detail.get_attribute('price')
 
-    product_cells = products_div.find_elements(By.TAG_NAME, 'div')
-
-    print("c")
-    print(type(product_cells))
+    # csvモジュールを使って複数行の内容をcsvに書き込み
+    with open('./csv/test.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(name_list)
 
     driver.close()
 

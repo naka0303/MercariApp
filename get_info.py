@@ -62,11 +62,15 @@ try:
         name = product_detail.get_attribute('alt')
         name_list.append(name)
         price = product_detail.get_attribute('price')
+        price_list.append(price)
+
+    # 商品名と価格を商品ごとに結合
+    name_price = list(zip(name_list, price_list))
 
     # csvモジュールを使って複数行の内容をcsvに書き込み
-    with open('./csv/test.csv', 'w', newline='') as f:
+    with open('./csv/test.csv', 'w') as f:
         writer = csv.writer(f)
-        writer.writerows(name_list)
+        writer.writerows(name_price)
 
     driver.close()
 

@@ -1,6 +1,7 @@
 from json import load
 import traceback
 import get_info
+import shaping
 import logger
 import os
 import datetime
@@ -24,8 +25,13 @@ try:
     # 現在時刻取得
     DT_NOW = str(datetime.datetime.now())
 
-    # LOGGERクラスのインスタンス
+    # chromedriverのパス格納
+    DRIVER_PATH = fs.Service(executable_path=APP_PATH + '/driver/chromedriver')
+
+    # インスタンス生成
     logger = logger.Logger(APP_PATH, LOGS_PATH, __file__)
+    driver = webdriver.Chrome(service=DRIVER_PATH)
+    shaping = shaping.Shaping()
 
     # 空のログファイルをlogsディレクトリ下に生成
     logger.make_logfile()
@@ -41,16 +47,11 @@ try:
     with open(CSV_PATH + '/test.csv', 'w') as f:
         f.write('')
 
-    # chromedriverのパス格納
-    DRIVER_PATH = fs.Service(executable_path=APP_PATH + '/driver/chromedriver')
-
-    # Chromeインスタンス作成
-    driver = webdriver.Chrome(service=DRIVER_PATH)
-
-    get_info = get_info.GetInfo(driver)
-
     # メルカリ画面のスクレイピング実行
-    get_info.scrape()
+    name_price = get_info.scrape(driver)
+
+    # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
+    shaping.remove_unneeded(name_price)
 
     driver.close()
 

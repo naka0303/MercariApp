@@ -1,3 +1,4 @@
+from logging import Logger
 from tkinter import E
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -5,24 +6,44 @@ from selenium.webdriver.chrome import service as fs
 import traceback
 import os
 import csv
+import logger
 
 SLEEP_TIME = 20
 
 try:
-    # MercariAppのディレクトリパス
-    app_path = os.getcwd()
+    # srcディレクトリパス
+    SRC_PATH = os.getcwd()
+
+    # MercariAppディレクトリパス
+    os.chdir('../')
+    APP_PATH = os.getcwd()
+    
+    # csvディレクトリパス
+    CSV_PATH = APP_PATH + '/csv'
+    
+    # logsディレクトリパス
+    LOGS_PATH = APP_PATH + "/logs"
+
+    # LOGGERクラスのインスタンス
+    logger = logger.LOGGER(APP_PATH, LOGS_PATH, __file__)
+
+    # 空のログファイルをlogsディレクトリ下に生成
+    logger.make_logfile()
+
+    logger.info('SRC_PATH: ' + SRC_PATH)
+    logger.info('APP_PATH: ' + APP_PATH)
+    logger.info('CSV_PATH: ' + CSV_PATH)
+    logger.info('LOGS_PATH: ' + LOGS_PATH)
 
     # 出力先csv作成
-    path = './csv/test.csv'
-    f = open(path, 'w')
-    f.write('')
-    f.close()
+    with open(CSV_PATH + '/test.csv', 'w') as f:
+        f.write('')
 
     # chromedriverのパス格納
-    driver_path = fs.Service(executable_path=app_path + '/driver/chromedriver')
+    DRIVER_PATH = fs.Service(executable_path=APP_PATH + '/driver/chromedriver')
 
     # Chromeインスタンス作成
-    driver = webdriver.Chrome(service=driver_path)
+    driver = webdriver.Chrome(service=DRIVER_PATH)
 
     # 検索ワード1
     search_word1 = "ワンダム"
@@ -35,7 +56,6 @@ try:
     # - 売り切れ : status=sold_out
     status = "status=sold_out"
 
-
     # 並び替え
     # - 新しい順 : order=desc&sort=created_time
     # - おすすめ順 : sort=score&order=desc
@@ -43,6 +63,11 @@ try:
     # - 価格の高い順 : sort=price&order=desc
     # - いいね順 : order=desc&sort=num_likes
     sort_order = "sort=price&order=desc"
+
+    logger.info('search_word1: ' + search_word1)
+    logger.info('search_word2: ' + search_word2)
+    logger.info('status: ' + status)
+    logger.info('sort_order: ' + sort_order)
 
     # メルカリ公式サイトを開く
     driver.get("https://jp.mercari.com/search?keyword=" + search_word1 + "%20" + search_word2 + "%20" + "&" + sort_order + "&" + status)

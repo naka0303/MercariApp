@@ -5,15 +5,9 @@ import logger
 SLEEP_TIME = 20
 
 # メルカリ画面のスクレイピング実行
-def scrape(driver):
-    # 検索ワード1
-    search_word1 = "僕なんか"
-
-    # 検索ワード2
-    search_word2 = "初回限定盤"
-
-    # 検索ワード3
-    search_word3 = "4枚セット"
+def scrape(driver, args):
+    # 検索ワード
+    search_word = '%20'.join(args)
 
     # 販売状況
     # - 販売中 : status=on_sale
@@ -28,14 +22,12 @@ def scrape(driver):
     # - いいね順 : order=desc&sort=num_likes
     sort_order = "order=asc&sort=price"
 
-    logger.info('search_word1: ' + search_word1)
-    logger.info('search_word2: ' + search_word2)
-    logger.info('search_word3: ' + search_word3)
-    logger.info('status: ' + status)
-    logger.info('sort_order: ' + sort_order)
+    logger.info('SEARCH_WORD: ' + search_word)
+    logger.info('STATUS: ' + status)
+    logger.info('SORT_ORDER: ' + sort_order)
 
     # メルカリ公式サイトを開く
-    driver.get("https://jp.mercari.com/search?keyword=" + search_word1 + "%20" + search_word2 + "%20" + search_word3 + "&" + sort_order + "&" + status)
+    driver.get("https://jp.mercari.com/search?keyword=" + search_word + "&" + sort_order + "&" + status)
 
     ### 出品商品情報取得 ###
     driver.implicitly_wait(SLEEP_TIME)

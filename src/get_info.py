@@ -29,7 +29,7 @@ def scrape(driver, args):
     # メルカリ公式サイトを開く
     driver.get("https://jp.mercari.com/search?keyword=" + search_word + "&" + sort_order + "&" + status)
 
-    ### 出品商品情報取得 ###
+    # 出品商品情報取得
     driver.implicitly_wait(SLEEP_TIME)
     products = driver.find_element(By.XPATH, '//*[@id="item-grid"]/ul')
 

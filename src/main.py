@@ -56,6 +56,9 @@ try:
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
     all_name_price_removed = csv_conditioning.remove_unneeded(args[1:], all_name_price)
 
+    # 配列情報をcsvに出力
+    csv_conditioning.write_data(CSV_PATH, all_name_price_removed)
+
     driver.close()
 
     logger.info('========== NORMAL END ==========')

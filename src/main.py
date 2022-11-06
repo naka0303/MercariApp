@@ -1,4 +1,3 @@
-from json import load
 import traceback
 import get_info
 import shaping
@@ -7,6 +6,7 @@ import os
 import datetime
 from selenium.webdriver.chrome import service as fs
 from selenium import webdriver
+import sys
 
 try:
     # srcディレクトリパス
@@ -28,6 +28,9 @@ try:
     # chromedriverのパス格納
     DRIVER_PATH = fs.Service(executable_path=APP_PATH + '/driver/chromedriver')
 
+    # 引数取得
+    args = sys.argv
+
     # インスタンス生成
     logger = logger.Logger(APP_PATH, LOGS_PATH, __file__)
     driver = webdriver.Chrome(service=DRIVER_PATH)
@@ -42,6 +45,10 @@ try:
     logger.info('APP_PATH: ' + APP_PATH)
     logger.info('CSV_PATH: ' + CSV_PATH)
     logger.info('LOGS_PATH: ' + LOGS_PATH)
+
+    # 引数チェック
+    if (len(args) == 1):
+        raise Exception
 
     # 出力先csv作成
     with open(CSV_PATH + '/test.csv', 'w') as f:

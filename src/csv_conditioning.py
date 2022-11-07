@@ -1,11 +1,19 @@
-import logger
+import log_outputter
 import csv
 
 class CsvConditioning:
 
+    # 商品情報から一番最初の商品を取得
+    def get_first(self, all_name_price_removed):
+        first = all_name_price_removed[0]
+        name = first[0]
+        price = first[1]
+
+        print(name, price)
+    
     # 配列情報をcsvに出力
-    def write_data(self, csv_path, all_name_price_removed):
-        with open(csv_path + '/test.csv', 'w') as f:
+    def write_data(self, csv_path, csv_file , all_name_price_removed):
+        with open(csv_path + '/' + csv_file, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(all_name_price_removed)
 

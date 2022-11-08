@@ -28,10 +28,13 @@ try:
     # chromedriverのパス格納
     DRIVER_PATH = fs.Service(executable_path=APP_PATH + '/driver/chromedriver')
 
+    # 実行ファイル名取得
+    run_filename = os.path.basename(__file__)
+
     # インスタンス生成
-    log_outputter = log_outputter.LogOutputter(APP_PATH, LOGS_PATH, __file__)
+    log_outputter = log_outputter.LogOutputter(APP_PATH, LOGS_PATH, run_filename)
     driver = webdriver.Chrome(service=DRIVER_PATH)
-    get_info = get_info.GetInfo()
+    get_info = get_info.GetInfo(APP_PATH, LOGS_PATH)
     csv_conditioning = csv_conditioning.CsvConditioning()
     date_formatter = date_formatter.DateFormatter()
 
@@ -93,5 +96,5 @@ try:
 except Exception:
     driver.close()
 
-    log_outputter.error(traceback.format_exc())
+    log_outputter.error(traceback.format_exc(), LOG_FILE)
     log_outputter.error('========== ERROR ==========', LOG_FILE)

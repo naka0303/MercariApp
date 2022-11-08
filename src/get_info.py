@@ -1,9 +1,17 @@
+import os
 from selenium.webdriver.common.by import By
 import log_outputter
 
 class GetInfo:
 
     SLEEP_TIME = 20
+    run_filename = os.path.basename(__file__)
+
+    # コンストラクタ
+    def __init__(self, app_path, logs_path):
+        self.app_path = app_path
+        self.logs_path = logs_path
+        self.log_outputter = log_outputter.LogOutputter(self.app_path, self.logs_path, self.run_filename)
 
     # メルカリ画面のスクレイピング実行
     def scrape(self, driver, args, log_file):
@@ -23,9 +31,9 @@ class GetInfo:
         # - いいね順 : order=desc&sort=num_likes
         sort_order = "order=asc&sort=price"
 
-        # log_outputter.info('SEARCH_WORD: ' + search_word, log_file)
-        # log_outputter.info('STATUS: ' + status, log_file)
-        # log_outputter.info('SORT_ORDER: ' + sort_order, log_file)
+        self.log_outputter.info('SEARCH_WORD: ' + search_word, log_file)
+        self.log_outputter.info('STATUS: ' + status, log_file)
+        self.log_outputter.info('SORT_ORDER: ' + sort_order, log_file)
 
         # メルカリ公式サイトを開く
         driver.get("https://jp.mercari.com/search?keyword=" + search_word + "&" + sort_order + "&" + status)

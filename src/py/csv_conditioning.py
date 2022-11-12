@@ -22,11 +22,11 @@ class CsvConditioning:
                 writer.writerow(data)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-    def remove_unneeded(self, args, all_name_price):
-        all_name_price_removed = []
+    def remove_unneeded(self, args, all_idx_name_price):
+        all_idx_name_price_removed = []
         idx = 0
-        for name_price in all_name_price:
-            name = name_price[0]
+        for idx_name_price in all_idx_name_price:
+            name = idx_name_price[1]
 
             # 検索ワードが商品名にあるかチェック
             none_cnt = 0
@@ -37,8 +37,8 @@ class CsvConditioning:
             
             # 検索ワード全てが商品名に無ければ配列から削除
             if (none_cnt != 0):
-                all_name_price_removed.append(name_price)
+                all_idx_name_price_removed.append(idx_name_price)
 
             idx += 1
         
-        return all_name_price_removed
+        return all_idx_name_price_removed

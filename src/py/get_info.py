@@ -1,4 +1,5 @@
 import os
+import requests
 from selenium.webdriver.common.by import By
 import log_outputter
 
@@ -8,10 +9,11 @@ class GetInfo:
     run_filename = os.path.basename(__file__)
 
     # コンストラクタ
-    def __init__(self, app_path, logs_path):
+    def __init__(self, app_path, logs_path, img_path):
         self.app_path = app_path
         self.logs_path = logs_path
         self.log_outputter = log_outputter.LogOutputter(self.app_path, self.logs_path, self.run_filename)
+        self.img_path = img_path
 
     # メルカリ画面のスクレイピング実行
     def scrape(self, driver, args, log_file):
@@ -48,34 +50,25 @@ class GetInfo:
         # 商品ごとに商品名と価格を取得する
         name_list = []
         price_list = []
+        idx_list = []
+        idx = 1
         for product in products_div:
             product_detail = product.find_element(By.TAG_NAME, 'mer-item-thumbnail')
+            img_url = product_detail.get_attribute('src-webp')
+            response = requests.get(img_url)
+            img = response.content
+            with open(self.img_path + '/' + str(idx) + '.jpg', "wb") as f:
+                f.write(img)
+
+            idx_list.append(idx)
             name = product_detail.get_attribute('alt')
             name_list.append(name)
             price = product_detail.get_attribute('price')
             price_list.append(price)
 
+            idx += 1
+
         # 商品名と価格を商品ごとに結合
-        name_price = list(zip(name_list, price_list))
+        idx_name_price = list(zip(idx_list, name_list, price_list))
 
-        # 一番最初の商品サムネイルをクリック
-        first_thum = products_div[0]
-
-        # 商品説明取得
-        first_thum.click()
-
-        # ウィンドウハンドルを取得
-        window_handles = driver.window_handles
-
-        # ウインドウ切り替え
-        driver.switch_to.window(window_handles[1])
-
-        # 商品説明欄のテキスト取得
-        driver.implicitly_wait(self.SLEEP_TIME)
-        item_description = driver.find_element(By.XPATH, '//*[@id="item-info"]/section[2]')
-
-        # 上記テキストを配列格納
-        item_description_list = []
-        item_description_list.append(item_description.text)
-
-        return [name_price, item_description_list]
+        return idx_name_price

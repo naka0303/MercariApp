@@ -58,4 +58,24 @@ class GetInfo:
         # 商品名と価格を商品ごとに結合
         name_price = list(zip(name_list, price_list))
 
-        return name_price
+        # 一番最初の商品サムネイルをクリック
+        first_thum = products_div[0]
+
+        # 商品説明取得
+        first_thum.click()
+
+        # ウィンドウハンドルを取得
+        window_handles = driver.window_handles
+
+        # ウインドウ切り替え
+        driver.switch_to.window(window_handles[1])
+
+        # 商品説明欄のテキスト取得
+        driver.implicitly_wait(self.SLEEP_TIME)
+        item_description = driver.find_element(By.XPATH, '//*[@id="item-info"]/section[2]')
+
+        # 上記テキストを配列格納
+        item_description_list = []
+        item_description_list.append(item_description.text)
+
+        return [name_price, item_description_list]

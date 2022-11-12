@@ -45,7 +45,8 @@ try:
     LOG_FILE = yyyymmdd + '_log.txt'
 
     # 商品情報出力用csvファイル名
-    CSV_FILE = yyyymmddhhmmss + '_all_product.csv'
+    ALL_PRODUCT_CSV_FILE = yyyymmddhhmmss + '_all_product.csv'
+    PRODUCT_DESCRIPTION_CSV_FILE = yyyymmddhhmmss + '_first_product_description.csv'
 
     # 空のログファイルをlogsディレクトリ下に生成
     log_outputter.make_logfile(LOG_FILE)
@@ -54,7 +55,8 @@ try:
     log_outputter.info('RUNTIME: ' + str(DT_NOW), LOG_FILE)
     log_outputter.info('SRC_PATH: ' + SRC_PATH, LOG_FILE)
     log_outputter.info('APP_PATH: ' + APP_PATH, LOG_FILE)
-    log_outputter.info('CSV_PATH: ' + CSV_PATH, LOG_FILE)
+    log_outputter.info('ALL_PRODUCT_CSV_FILE: ' + CSV_PATH, LOG_FILE)
+    log_outputter.info('PRODUCT_DESCRIPTION_CSV_FILE: ' + CSV_PATH, LOG_FILE)
     log_outputter.info('LOGS_PATH: ' + LOGS_PATH, LOG_FILE)
 
     # 引数取得
@@ -66,20 +68,25 @@ try:
         log_outputter.info('ARGS' + str(i + 1) + ': ' + args[i + 1], LOG_FILE)
 
     # 出力先csv作成
-    with open(CSV_PATH + '/' + CSV_FILE, 'w') as f:
+    with open(CSV_PATH + '/' + ALL_PRODUCT_CSV_FILE, 'w') as f:
+        f.write('')
+    with open(CSV_PATH + '/' + PRODUCT_DESCRIPTION_CSV_FILE, 'w') as f:
         f.write('')
 
     # メルカリ画面のスクレイピング実行
-    all_name_price = get_info.scrape(driver, args[1:], LOG_FILE)
+    all_name_price, item_description_list = get_info.scrape(driver, args[1:], LOG_FILE)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
     all_name_price_removed = csv_conditioning.remove_unneeded(args[1:], all_name_price)
 
+    log_outputter.info('PRODUCT_COUNT: ' + str(len(all_name_price_removed)), LOG_FILE)
+
     # 商品情報をcsvに出力
-    csv_conditioning.write_data(CSV_PATH, CSV_FILE, all_name_price_removed)
+    csv_conditioning.write_data(CSV_PATH, ALL_PRODUCT_CSV_FILE, all_name_price_removed)
+    csv_conditioning.write_data(CSV_PATH, PRODUCT_DESCRIPTION_CSV_FILE, item_description_list)
 
     # 商品情報から一番最初の商品を取得
-    csv_conditioning.get_first(all_name_price_removed)
+    # csv_conditioning.get_first(all_name_price_removed)
 
     driver.close()
 

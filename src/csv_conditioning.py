@@ -12,10 +12,14 @@ class CsvConditioning:
         print(name, price)
     
     # 配列情報をcsvに出力
-    def write_data(self, csv_path, csv_file , all_name_price_removed):
+    def write_data(self, csv_path, csv_file , data):
         with open(csv_path + '/' + csv_file, 'w') as f:
             writer = csv.writer(f)
-            writer.writerows(all_name_price_removed)
+
+            if ('all_product' in csv_file):
+                writer.writerows(data)
+            else:
+                writer.writerow(data)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
     def remove_unneeded(self, args, all_name_price):

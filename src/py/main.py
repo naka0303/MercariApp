@@ -17,7 +17,7 @@ try:
     # 各ディレクトリパス格納
     SRC_PATH = os.getcwd()
 
-    os.chdir('../')
+    os.chdir('../../')
     APP_PATH = os.getcwd()
     CSV_PATH = APP_PATH + '/csv'
     LOGS_PATH = APP_PATH + "/logs"

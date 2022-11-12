@@ -29,7 +29,7 @@ class GetInfo:
         # - 価格の安い順 : order=asc&sort=price
         # - 価格の高い順 : sort=price&order=desc
         # - いいね順 : order=desc&sort=num_likes
-        sort_order = "order=asc&sort=price"
+        sort_order = "order=desc&sort=num_likes"
 
         self.log_outputter.info('SEARCH_WORD: ' + search_word, log_file)
         self.log_outputter.info('STATUS: ' + status, log_file)

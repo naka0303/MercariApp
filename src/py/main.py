@@ -81,12 +81,13 @@ try:
 
     log_outputter.info('PRODUCT_COUNT: ' + str(len(all_name_price_removed)), LOG_FILE)
 
-    # 商品情報をcsvに出力
-    csv_conditioning.write_data(CSV_PATH, ALL_PRODUCT_CSV_FILE, all_name_price_removed)
-    csv_conditioning.write_data(CSV_PATH, PRODUCT_DESCRIPTION_CSV_FILE, item_description_list)
+    # 全商品情報をcsvに出力
+    csv_conditioning.write_data(CSV_PATH, ALL_PRODUCT_CSV_FILE, all_name_price_removed, 'w')
 
-    # 商品情報から一番最初の商品を取得
-    # csv_conditioning.get_first(all_name_price_removed)
+    # 商品情報から一番最初の商品情報を取得
+    first_name_price_list = csv_conditioning.get_first(all_name_price_removed)
+    csv_conditioning.write_data(CSV_PATH, PRODUCT_DESCRIPTION_CSV_FILE, first_name_price_list, 'w')
+    csv_conditioning.write_data(CSV_PATH, PRODUCT_DESCRIPTION_CSV_FILE, item_description_list, 'a')
 
     driver.close()
 

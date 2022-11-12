@@ -5,15 +5,15 @@ class CsvConditioning:
 
     # 商品情報から一番最初の商品を取得
     def get_first(self, all_name_price_removed):
-        first = all_name_price_removed[0]
-        name = first[0]
-        price = first[1]
+        first_name_price = all_name_price_removed[0]
+        first_name_price_list = []
+        first_name_price_list.append(first_name_price)
 
-        print(name, price)
+        return first_name_price_list
     
     # 配列情報をcsvに出力
-    def write_data(self, csv_path, csv_file , data):
-        with open(csv_path + '/' + csv_file, 'w') as f:
+    def write_data(self, csv_path, csv_file , data, mode):
+        with open(csv_path + '/' + csv_file, mode) as f:
             writer = csv.writer(f)
 
             if ('all_product' in csv_file):

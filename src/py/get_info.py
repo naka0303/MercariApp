@@ -1,6 +1,5 @@
 import os
 import log_outputter
-import requests
 from selenium.webdriver.common.by import By
 
 class GetInfo:
@@ -55,11 +54,6 @@ class GetInfo:
         idx = 1
         for product in products_div:
             product_detail = product.find_element(By.TAG_NAME, 'mer-item-thumbnail')
-            # response = requests.get(img_url)
-            # img = response.content
-            # print(img)
-            # with open(self.img_path + '/' + str(idx) + '.jpg', "wb") as f:
-            #    f.write(img)
 
             idx_list.append(idx)
             name = product_detail.get_attribute('alt')

@@ -1,4 +1,3 @@
-import log_outputter
 import csv
 
 class CsvFiler:

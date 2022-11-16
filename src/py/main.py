@@ -1,8 +1,8 @@
 import traceback
 import get_info
 import date_formatter
-import csv_conditioning
 import log_outputter
+from conditioning import csv_filer, spreadsheeter
 import os
 import time
 import datetime
@@ -16,12 +16,12 @@ try:
 
     # 各ディレクトリパス格納
     SRC_PATH = os.getcwd()
-
     os.chdir('../../')
     APP_PATH = os.getcwd()
     CSV_PATH = APP_PATH + '/csv'
     LOGS_PATH = APP_PATH + '/logs'
     IMG_PATH = APP_PATH + '/img'
+    OAUTH_PATH = APP_PATH + '/oauth'
 
     # 現在時刻取得
     DT_NOW = datetime.datetime.now()
@@ -36,7 +36,9 @@ try:
     log_outputter = log_outputter.LogOutputter(APP_PATH, LOGS_PATH, run_filename)
     driver = webdriver.Chrome(service=DRIVER_PATH)
     get_info = get_info.GetInfo(APP_PATH, LOGS_PATH, IMG_PATH)
-    csv_conditioning = csv_conditioning.CsvConditioning()
+    csv_filer = csv_filer.CsvFiler()
+    spreadsheeter = spreadsheeter.SpreadSheeter()
+    
     date_formatter = date_formatter.DateFormatter()
 
     # 日時のフォーマットを任意の形式に変更
@@ -73,15 +75,18 @@ try:
         f.write('')
 
     # メルカリ画面のスクレイピング実行
-    all_idx_name_price = get_info.scrape(driver, args[1:], LOG_FILE)
+    all_idx_name_price_img = get_info.scrape(driver, args[1:], LOG_FILE)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-    all_idx_name_price_removed = csv_conditioning.remove_unneeded(args[1:], all_idx_name_price)
+    all_idx_name_price_img_removed = csv_filer.remove_unneeded(args[1:], all_idx_name_price_img)
 
-    log_outputter.info('PRODUCT_COUNT: ' + str(len(all_idx_name_price_removed)), LOG_FILE)
+    log_outputter.info('PRODUCT_COUNT: ' + str(len(all_idx_name_price_img_removed)), LOG_FILE)
 
     # 全商品情報をcsvに出力
-    csv_conditioning.write_data(CSV_PATH, ALL_PRODUCT_CSV_FILE, all_idx_name_price_removed, 'w')
+    csv_filer.write_data(CSV_PATH, ALL_PRODUCT_CSV_FILE, all_idx_name_price_img_removed, 'w')
+
+    # スプレッドシート書き込み(テスト)
+    spreadsheeter.make_sheet(OAUTH_PATH, all_idx_name_price_img_removed)
 
     driver.close()
 

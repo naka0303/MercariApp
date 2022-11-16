@@ -1,7 +1,7 @@
 import os
+import log_outputter
 import requests
 from selenium.webdriver.common.by import By
-import log_outputter
 
 class GetInfo:
 
@@ -51,24 +51,27 @@ class GetInfo:
         name_list = []
         price_list = []
         idx_list = []
+        img_list = []
         idx = 1
         for product in products_div:
             product_detail = product.find_element(By.TAG_NAME, 'mer-item-thumbnail')
-            img_url = product_detail.get_attribute('src-webp')
-            response = requests.get(img_url)
-            img = response.content
-            with open(self.img_path + '/' + str(idx) + '.jpg', "wb") as f:
-                f.write(img)
+            # response = requests.get(img_url)
+            # img = response.content
+            # print(img)
+            # with open(self.img_path + '/' + str(idx) + '.jpg', "wb") as f:
+            #    f.write(img)
 
             idx_list.append(idx)
             name = product_detail.get_attribute('alt')
             name_list.append(name)
             price = product_detail.get_attribute('price')
             price_list.append(price)
+            img_url = product_detail.get_attribute('src-webp')
+            img_list.append(img_url)
 
             idx += 1
 
         # 商品名と価格を商品ごとに結合
-        idx_name_price = list(zip(idx_list, name_list, price_list))
+        idx_name_price_img = list(zip(idx_list, name_list, price_list, img_list))
 
-        return idx_name_price
+        return idx_name_price_img

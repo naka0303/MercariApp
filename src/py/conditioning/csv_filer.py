@@ -1,7 +1,7 @@
 import log_outputter
 import csv
 
-class CsvConditioning:
+class CsvFiler:
 
     # 商品情報から一番最初の商品を取得
     def get_first(self, all_name_price_removed):

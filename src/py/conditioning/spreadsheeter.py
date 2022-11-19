@@ -16,7 +16,7 @@ class SpreadSheeter:
 
         # 書き込むシートを作成
         ws = wb.add_worksheet(title=str(yyyymmddhhmmss), rows=100, cols=5)
-        cell_list = ws.range('A1:D100')
+        cell_list = ws.range('A1:D500')
 
         # 書き込み用リスト作成
         for i, j in enumerate(all_idx_name_price_img_removed):

@@ -30,7 +30,7 @@ class GetInfo:
         # - 価格の安い順 : order=asc&sort=price
         # - 価格の高い順 : sort=price&order=desc
         # - いいね順 : order=desc&sort=num_likes
-        sort_order = "order=desc&sort=num_likes"
+        sort_order = "sort=score&order=desc"
 
         self.log_outputter.info('SEARCH_WORD: ' + search_word, log_file)
         self.log_outputter.info('STATUS: ' + status, log_file)
@@ -57,7 +57,8 @@ class GetInfo:
 
             idx_list.append(idx)
             name = product_detail.get_attribute('alt')
-            name_list.append(name)
+            name_removed = name.replace('のサムネイル', '')
+            name_list.append(name_removed)
             price = product_detail.get_attribute('price')
             price_list.append(price)
             img_url = product_detail.get_attribute('src-webp')

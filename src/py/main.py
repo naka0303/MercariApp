@@ -2,12 +2,13 @@ import traceback
 import get_info
 import date_formatter
 import log_outputter
+import chromedriver_binary
 from conditioning import csv_filer, spreadsheeter
 import os
 import time
 import datetime
-from selenium.webdriver.chrome import service as fs
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import sys
 
 try:
@@ -20,21 +21,19 @@ try:
     # 各ディレクトリパス格納
     os.chdir('../../')
     APP_DIR_PATH = os.getcwd()
-    DRIVER_DIR_PATH = APP_DIR_PATH + '/driver'
     SRC_DIR_PATH = APP_DIR_PATH + '/src'
     CSV_DIR_PATH = APP_DIR_PATH + '/csv'
     LOGS_DIR_PATH = APP_DIR_PATH + '/logs'
     IMG_DIR_PATH = APP_DIR_PATH + '/img'
     OAUTH_DIR_PATH = APP_DIR_PATH + '/oauth'
 
-    # chromedriverパス格納
-    DRIVER_PATH = fs.Service(executable_path=DRIVER_DIR_PATH + '/chromedriver')
-
     # 実行ファイル名取得
     RUN_FILENAME = os.path.basename(__file__)
 
     # インスタンス生成
-    driver = webdriver.Chrome(service=DRIVER_PATH)
+    options = Options()
+    options.headless = True
+    driver = webdriver.Chrome(options=options)
     log_outputter = log_outputter.LogOutputter(APP_DIR_PATH, LOGS_DIR_PATH, RUN_FILENAME)
     get_info = get_info.GetInfo(APP_DIR_PATH, LOGS_DIR_PATH, IMG_DIR_PATH)
     csv_filer = csv_filer.CsvFiler()
@@ -55,7 +54,6 @@ try:
 
     log_outputter.info('========== START APP ==========', LOG_FILE)
     log_outputter.info('RUNTIME: ' + str(DT_NOW), LOG_FILE)
-    log_outputter.info('DRIVER_DIR_PATH: ' + DRIVER_DIR_PATH, LOG_FILE)
     log_outputter.info('APP_DIR_PATH: ' + APP_DIR_PATH, LOG_FILE)
     log_outputter.info('SRC_DIR_PATH: ' + SRC_DIR_PATH, LOG_FILE)
     log_outputter.info('IMG_DIR_PATH: ' + IMG_DIR_PATH, LOG_FILE)

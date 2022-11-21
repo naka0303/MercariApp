@@ -31,13 +31,14 @@ try:
     IMG_DIR_PATH = APP_DIR_PATH + '/img'
     OAUTH_DIR_PATH = APP_DIR_PATH + '/oauth'
 
+    driver_dir_path = ''
     options = Options()
     options.headless = True
 
     if ('local' in hostname):
         # chromedriverパス格納
-        DRIVER_DIR_PATH = APP_DIR_PATH + '/driver'
-        DRIVER_PATH = fs.Service(executable_path=DRIVER_DIR_PATH + '/chromedriver')
+        driver_dir_path = APP_DIR_PATH + '/driver'
+        DRIVER_PATH = fs.Service(executable_path=driver_dir_path + '/chromedriver')
         driver = webdriver.Chrome(service=DRIVER_PATH, options=options)
     else:
         import chromedriver_binary
@@ -67,7 +68,7 @@ try:
 
     log_outputter.info('========== START APP ==========', LOG_FILE)
     log_outputter.info('RUNTIME: ' + str(DT_NOW), LOG_FILE)
-    log_outputter.info('DRIVER_DIR_PATH: ' + DRIVER_DIR_PATH, LOG_FILE)
+    log_outputter.info('driver_dir_path: ' + driver_dir_path, LOG_FILE)
     log_outputter.info('APP_DIR_PATH: ' + APP_DIR_PATH, LOG_FILE)
     log_outputter.info('SRC_DIR_PATH: ' + SRC_DIR_PATH, LOG_FILE)
     log_outputter.info('IMG_DIR_PATH: ' + IMG_DIR_PATH, LOG_FILE)

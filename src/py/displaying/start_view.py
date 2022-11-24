@@ -1,6 +1,11 @@
 import tkinter as tk
+import os
 
 class StartView:
+
+    os.chdir('../../')
+    APP_DIR_PATH = os.getcwd()
+    TMP_DIR_PATH = APP_DIR_PATH + '/tmp'
 
     def __init__(self):
         self.root = tk.Tk()
@@ -23,15 +28,18 @@ class StartView:
         self.search_word3 = tk.Entry(width=10)
         self.search_word3.place(x=110, y=130)
 
-        self.search_btn = tk.Button(self.root, text='検索', command=self.end)
+        self.search_btn = tk.Button(self.root, text='検索', command=self.output_search_word)
         self.search_btn.place(x=140, y=170)
 
         self.root.mainloop()
 
-    def get_search_word():
-        search_word1 = search_word1.get()
-        search_word2 = search_word2.get()
-        search_word3 = search_word3.get()
+    def output_search_word(self):
+        search_words = [self.search_word1.get(), self.search_word2.get(), self.search_word3.get()]
+        with open(self.TMP_DIR_PATH + '/' + 'test.txt', 'w') as f:
+            for search_word in search_words:
+                f.write('%s\n' % search_word)
+
+        self.end()
 
     def start(self):
         # ウィンドウの表示開始

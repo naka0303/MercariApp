@@ -4,7 +4,6 @@ import get_info
 import date_formatter
 import log_outputter
 from conditioning import csv_filer, spreadsheeter
-# from displaying import start_view
 import os
 import time
 import datetime
@@ -54,7 +53,6 @@ try:
     csv_filer = csv_filer.CsvFiler()
     spreadsheeter = spreadsheeter.SpreadSheeter()
     date_formatter = date_formatter.DateFormatter()
-    # start_view = start_view.StartView()
 
     # 日時のフォーマットを任意の形式に変更
     yyyymmdd, yyyymmddhhmmss = date_formatter.format_date()

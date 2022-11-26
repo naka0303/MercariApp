@@ -22,7 +22,7 @@ class GetInfo:
         # 販売状況
         # - 販売中 : status=on_sale
         # - 売り切れ : status=sold_out
-        status = "status=sold_out"
+        status = "status=on_sale"
     
         # 並び替え
         # - 新しい順 : order=desc&sort=created_time

@@ -25,7 +25,5 @@ readonly arg1=$(sed -n '1p' $TMP_DIR/test.txt)
 readonly arg2=$(sed -n '2p' $TMP_DIR/test.txt)
 readonly arg3=$(sed -n '3p' $TMP_DIR/test.txt)
 
-echo $arg1 $arg2 $arg3
-
-
-
+# メルカリ画面のスクレイピングを行い、商品情報をスプレッドシートに出力する
+python3 $SRC_DIR/py/main.py $arg1 $arg2 $arg3

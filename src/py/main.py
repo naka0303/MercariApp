@@ -81,7 +81,7 @@ try:
         f.write('')
     log_outputter.info('OUTPUT_CSV_PATH: ' + CSV_DIR_PATH + '/' + ALL_PRODUCT_CSV_FILE, LOG_FILE)
 
-    # 引数取得
+    # 引数チェック
     args = sys.argv
     if (len(args) == 1):
         raise Exception

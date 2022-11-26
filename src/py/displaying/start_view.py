@@ -1,4 +1,5 @@
 import tkinter as tk
+import sys
 import os
 
 class StartView:
@@ -7,7 +8,11 @@ class StartView:
     APP_DIR_PATH = os.getcwd()
     TMP_DIR_PATH = APP_DIR_PATH + '/tmp'
 
-    def __init__(self):
+    def __init__(self, yyyymmdd, hhmmss):
+        # 引数取得
+        self.yyyymmdd = yyyymmdd
+        self.hhmmss = hhmmss
+
         self.root = tk.Tk()
 
         self.root.title('検索文字入力フォーム')
@@ -35,7 +40,7 @@ class StartView:
 
     def output_search_word(self):
         search_words = [self.search_word1.get(), self.search_word2.get(), self.search_word3.get()]
-        with open(self.TMP_DIR_PATH + '/' + 'test.txt', 'w') as f:
+        with open(self.TMP_DIR_PATH + '/' + self.yyyymmdd + '_' + self.hhmmss + '.txt', 'w') as f:
             for search_word in search_words:
                 f.write('%s\n' % search_word)
 
@@ -49,4 +54,10 @@ class StartView:
         # ウィンドウの表示終了
         self.root.destroy()
 
-StartView()
+if __name__ == '__main__':
+    # 引数取得
+    args = sys.argv
+    yyyymmdd = args[1]
+    hhmmss = args[2]
+
+    StartView(yyyymmdd, hhmmss)

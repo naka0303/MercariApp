@@ -30,13 +30,11 @@
   - 実行ブランチは以下  
     ローカル: master  
     EC2: master
-  - cronで定期実行することを想定しているが、単発実行でもOK  
-  ※ 定期実行の場合は、1時間に1回のペースの予定
+  - start_view.pyとmain.pyはrun.shから呼び出すことする  
   - GCP APIにOAuth2.0でアクセスしようとすると、以下エラーが発生する場合あり  
   "google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', '{\n  "error": "invalid_grant",\n  "error_description": "Token has been expired or revoked."\n}')"  
   上記エラーが出る理由は、OAuth同意画面が「外部向け」で、公開ステータスが「テスト」になっていると、7日間で有効期限が切れるリフレッシュトークンが発行されてしまうから  
-  → 当面は7日ごとに「OAuth 2.0 クライアント ID」を  再発行し、oauth下に配置し直す
-
+  → 当面は7日ごとに「OAuth 2.0 クライアント ID」を再発行し、oauth下に配置し直す
 
 # FIXME
   - 時間がずれているので、現時間になるよう修正する(EC2実行時のみ)

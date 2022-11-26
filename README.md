@@ -45,7 +45,7 @@
 ## csvファイルの日別格納用シェル
 ``` bash
   cd src/bash/
-  ./move_csv.py; echo $?
+  ./move_csv.sh; echo $?
 ```
 
 # NOTES

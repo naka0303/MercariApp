@@ -20,22 +20,51 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;なお、他verでの動作保証なし
 
 # USAGE
+## 検索文字列入力フォームの表示
+  ```
+  cd src/py/
+  python3 start_view.py <arg1> <arg2>; echo $?
+  ```
+  ※ このスクリプトはrun.shから呼び出す前提
+
+## メルカリ画面スクレイピング実行、商品情報スプレッドシート出力
   ```
   cd src/py/
   python3 main.py <arg1> <arg2> <arg3>; echo $?
   ```
-  ※ 引数はメルカリでの検索キーワードで、最大3ワード入力可能
+  ※1 このスクリプトは、単発実行、run.shからの呼び出しのどちらでも実行可能  
+  ※2 引数はメルカリでの検索キーワードで、最大3ワード入力可能
+
+## MercariApp実行シェル
+  ``` bash
+  cd src/bash/
+  ./run.sh; echo $?
+  ```
+  ※　このシェルでは、start_view.pyとmain.pyを呼び出す
+
+## csvファイルの日別格納用シェル
+``` bash
+  cd src/bash/
+  ./move_csv.py; echo $?
+```
 
 # NOTES
   - 実行ブランチは以下  
     ローカル: master  
     EC2: master
-  - start_view.pyとmain.pyはrun.shから呼び出すことする  
+  - 2022/11/27現在では、run.shを手動実行しているが、いずれ定期実行に移行する予定  
+    ※1 定期実行の場合は、1時間に1回のペースの予定  
+    ※2 定期実行の場合は、検索文字列入力フォームは使わず、検索文字列を固定文字にする
   - GCP APIにOAuth2.0でアクセスしようとすると、以下エラーが発生する場合あり  
   "google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', '{\n  "error": "invalid_grant",\n  "error_description": "Token has been expired or revoked."\n}')"  
   上記エラーが出る理由は、OAuth同意画面が「外部向け」で、公開ステータスが「テスト」になっていると、7日間で有効期限が切れるリフレッシュトークンが発行されてしまうから  
   → 当面は7日ごとに「OAuth 2.0 クライアント ID」を再発行し、oauth下に配置し直す
+  - csvファイルに日別格納用シェルは、23:30にCSVファイルを1日単位のディレクトリに格納する予定(以下、日別ディレクトリと表現)  
+    例) csv/2022-11-12
+  - 日別ディレクトリに格納する際は、1日分のCSVファイルが存在することを確認してから格納する  
+    もしCSVファイルが不足していた場合は、格納用スクリプトは実行しない
 
 # FIXME
   - 時間がずれているので、現時間になるよう修正する(EC2実行時のみ)
   - 必須ディレクトリを手動ではなく自動で作成できるようにする
+  - 検索文字列に関して、手動実行の場合は検索文字列入力フォームで入力、定期実行の場合は固定文字にするよう修正する

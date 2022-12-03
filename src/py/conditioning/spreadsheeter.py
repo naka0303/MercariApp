@@ -3,10 +3,13 @@ import gspread
 
 class SpreadSheeter:
     def make_sheet(self, oauth_path, yyyymmddhhmmss, all_idx_name_price_img_removed):
+        # oauthディレクトリ下のディレクトリとファイルを取得
+        oauth_listdir = os.listdir(oauth_path)
+
         # OAuthキーの利用
         gc = gspread.oauth(
             # client_secretパスを格納
-            credentials_filename=os.path.join(oauth_path, 'client_secret_708479444314-ijf2a2p87lf2nvpn7p4tbid79uglb4ub.apps.googleusercontent.com.json'),
+            credentials_filename=os.path.join(oauth_path, oauth_listdir[2]),
             # 認証ファイルの保存先パスを格納
             authorized_user_filename=os.path.join(oauth_path, 'authorized_user.json')
         )

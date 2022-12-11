@@ -66,18 +66,18 @@ class StartView:
         self.status_btn7.place(x=510, y=250)
 
         # 検索ボタン生成
-        self.search_btn = tk.Button(self.root, text='検索', command=self.output_search_word)
+        self.search_btn = tk.Button(self.root, text='検索', command=self.output_search_condition)
         self.search_btn.place(x=140, y=280)
 
         self.root.mainloop()
 
     # 検索文字列のテキスト出力用関数
-    def output_search_word(self):
+    def output_search_condition(self):
         search_words = [self.search_word1.get(), self.search_word2.get(), self.search_word3.get()]
         with open(self.TMP_DIR_PATH + '/' + self.yyyymmdd + '_' + self.hhmmss + '.txt', 'w') as f:
             for search_word in search_words:
-                f.write('%s\n' % search_word)
-            f.write(str(self.var1.get()))
+                f.write(search_word + '\n')
+            f.write(str(self.var1.get()) + '\n')
             f.write(str(self.var2.get()))
 
         self.end()

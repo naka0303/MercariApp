@@ -45,13 +45,15 @@ start $SCRIPT_NAME
 logger 'run start_view.py'
 python3 $SRC_DIR/py/displaying/start_view.py $YYYYMMDD $HHMMSS
 
-readonly arg1=$(sed -n '1p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
-readonly arg2=$(sed -n '2p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
-readonly arg3=$(sed -n '3p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
+readonly search_word1=$(sed -n '1p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
+readonly search_word2=$(sed -n '2p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
+readonly search_word3=$(sed -n '3p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
+readonly status=$(sed -n '4p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
+readonly sort_order=$(sed -n '5p' $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt)
 
 # メルカリ画面のスクレイピングを行い、商品情報をスプレッドシートに出力する
 logger 'run main.py'
-python3 $SRC_DIR/py/main.py $arg1 $arg2 $arg3
+python3 $SRC_DIR/py/main.py $search_word1 $search_word2 $search_word3 $status $sort_order
 
 # tmpディレクトリのファイルを全削除
 rm -f $TMP_DIR/*

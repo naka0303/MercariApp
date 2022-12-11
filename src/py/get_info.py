@@ -17,12 +17,12 @@ class GetInfo:
     # メルカリ画面のスクレイピング実行
     def scrape(self, driver, args, log_file):
         # 検索ワード
-        search_word = '%20'.join(args)
+        search_word = '%20'.join(args[:3])
 
         # 販売状況
         # - 販売中 : status=on_sale
         # - 売り切れ : status=sold_out
-        status = "status=sold_out"
+        status = 'status=on_sale' if args[3] == 0 else 'status=sold_out'
     
         # 並び替え
         # - 新しい順 : order=desc&sort=created_time
@@ -30,8 +30,18 @@ class GetInfo:
         # - 価格の安い順 : order=asc&sort=price
         # - 価格の高い順 : sort=price&order=desc
         # - いいね順 : order=desc&sort=num_likes
-        sort_order = "sort=score&order=desc"
-
+        sort_order = ''
+        if args[4] == 2:
+            sort_order = 'sort=score&order=desc'
+        elif args[4] == 3:
+            sort_order = 'sort=score&order=desc'
+        elif args[4] == 4:
+            sort_order = 'order=asc&sort=price'
+        elif args[4] == 5:
+            sort_order = 'sort=price&order=desc'
+        else:
+            sort_order = 'order=desc&sort=num_likes'
+            
         self.log_outputter.info('SEARCH_WORD: ' + search_word, log_file)
         self.log_outputter.info('STATUS: ' + status, log_file)
         self.log_outputter.info('SORT_ORDER: ' + sort_order, log_file)

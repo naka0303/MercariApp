@@ -58,7 +58,7 @@
   - GCP APIにOAuth2.0でアクセスしようとすると、以下エラーが発生する場合あり  
   "google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', '{\n  "error": "invalid_grant",\n  "error_description": "Token has been expired or revoked."\n}')"  
   上記エラーが出る理由は、OAuth同意画面が「外部向け」で、公開ステータスが「テスト」になっていると、7日間で有効期限が切れるリフレッシュトークンが発行されてしまうから  
-  → 当面は7日ごとに「OAuth 2.0 クライアント ID」を再発行し、oauth下に配置し直す
+  → 当面は7日ごとに「OAuth 2.0 クライアント ID」を再発行し、oauth下に配置し直し、元から置いてあったauthorized_user.jsonはbkに退避
   - csvファイルに日別格納用シェルは、23:30にCSVファイルを1日単位のディレクトリに格納する予定(以下、日別ディレクトリと表現)  
     例) csv/2022-11-12
   - 日別ディレクトリに格納する際は、1日分のCSVファイルが存在することを確認してから格納する  

@@ -1,5 +1,5 @@
 import os
-import log_outputter
+from .. logging import log_outputter
 from selenium.webdriver.common.by import By
 
 class GetInfo:

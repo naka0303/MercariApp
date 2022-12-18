@@ -1,16 +1,18 @@
 import csv
 import math
 import matplotlib.pyplot as plt
-import numpy as np
-from numpy import sort
+import os
+import sys
+os.chdir('../../')
+sys.path.append(os.getcwd() + '/py/loggings/')
+sys.path.append(os.getcwd() + '/py/dating/')
 import log_outputter
 import date_formatter
-import os
 import time
 import datetime
 import socket
 import traceback
-import sys
+
 
 try:
     # 処理時間計測開始
@@ -23,12 +25,13 @@ try:
     hostname = socket.gethostname()
 
     # 各ディレクトリパス格納
-    os.chdir('../../')
+    os.chdir('../')
     APP_DIR_PATH = os.getcwd()
     SRC_DIR_PATH = APP_DIR_PATH + '/src'
     CSV_DIR_PATH = APP_DIR_PATH + '/csv'
     LOGS_DIR_PATH = APP_DIR_PATH + '/logs'
     IMG_DIR_PATH = APP_DIR_PATH + '/img'
+    GRAPH_DIR_PATH = APP_DIR_PATH + '/graph'
     OAUTH_DIR_PATH = APP_DIR_PATH + '/oauth'
 
     # 実行ファイル名取得
@@ -44,13 +47,6 @@ try:
     # ログファイル名
     LOG_FILE = yyyymmdd + '_' + RUN_FILENAME + '_log.txt'
 
-    # 引数チェック
-    args = sys.argv
-    if (len(args) == 2):
-        log_outputter.info('ARGS1: ' + args[1], LOG_FILE)
-    else:
-        raise Exception
-
     # 空のログファイルをlogsディレクトリ下に生成
     log_outputter.make_logfile(LOG_FILE)
 
@@ -59,9 +55,17 @@ try:
     log_outputter.info('APP_DIR_PATH: ' + APP_DIR_PATH, LOG_FILE)
     log_outputter.info('SRC_DIR_PATH: ' + SRC_DIR_PATH, LOG_FILE)
     log_outputter.info('IMG_DIR_PATH: ' + IMG_DIR_PATH, LOG_FILE)
+    log_outputter.info('GRAPH_DIR_PATH: ' + GRAPH_DIR_PATH, LOG_FILE)
     log_outputter.info('CSV_DIR_PATH: ' + CSV_DIR_PATH, LOG_FILE)
     log_outputter.info('LOGS_DIR_PATH: ' + LOGS_DIR_PATH, LOG_FILE)
     log_outputter.info('OUTPUT_LOG_PATH: ' + LOGS_DIR_PATH + '/' + LOG_FILE, LOG_FILE)
+
+    # 引数チェック
+    args = sys.argv
+    if (len(args) == 2):
+        log_outputter.info('ARGS1: ' + args[1], LOG_FILE)
+    else:
+        raise Exception
 
     ### csvから価格帯を取得する ###
     # (1) 価格リストを昇順にする
@@ -73,7 +77,7 @@ try:
     # (7) (6)で決定された価格分割に沿って、価格リストを分割していく
 
     prices = []
-    with open(args[1], 'r') as f:
+    with open(args[1] + '.csv', 'r') as f:
         reader = csv.reader(f)
         for r in reader:
             prices.append(int(r[2]))
@@ -126,16 +130,18 @@ try:
     # グラフの縦軸（件数）
     height = item_num_list
 
-    print(left)
-
     label = [str(price) + 'yen~' for price in price_range]
     # left = [l.replace('0', '') for l in label]
 
     plt.figure(figsize=(13, 5))
     plt.bar(left, height, tick_label=label, edgecolor='blue', linewidth=100, align='center', width=1)
     plt.xlabel('Price Range')
-    plt.ylabel("Item Num")
-    plt.show()
+    plt.ylabel('Item Num')
+
+    arg_splited = args[1].split('/')
+    jpeg_file = GRAPH_DIR_PATH + '/' + arg_splited[-1] + '.jpeg'
+    plt.savefig(jpeg_file)
+    # plt.show()
 
 except Exception:
     print(traceback.format_exc())

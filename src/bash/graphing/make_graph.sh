@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-12-15
-# UPDATE: 2022-12-19
+# UPDATE: 2022-12-20
 # PURPOSE:
 #   - 引数で指定したcsvファイルのグラフを作成する
 # USAGE:
 #   - ./make_graph.sh <csv_file>
-# NOTES:
-#   - このshはcronでは動かさない想定
 
 
 ### 変数宣言 ###

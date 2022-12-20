@@ -69,7 +69,7 @@ logger "CSV_FILE: $CSV_FILE"
 logger "output_log_file: $LOG_DIR/bash/$LOG_NAME"
 
 ### 引数で指定したcsvファイルのグラフを作成する ###
-python3 $SRC_DIR/py/make_graph.py $CSV_DIR/$CSV_FILE
+python3 $SRC_DIR/py/graphing/make_graph.py $CSV_DIR/$CSV_FILE
 
 # graph下にグラフ画像が保存されたか確認
 readonly jpeg_num=$(ls $GRAPH_DIR/$CSV_FILE.jpeg | wc -l)

@@ -24,7 +24,7 @@ logger() {
     msg=$1
 
     now_date=$(date '+%Y-%m-%d %T')
-    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME 
+    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME.txt
 }
 
 # 処理開始用関数
@@ -49,6 +49,7 @@ logger "LOG_DIR: $LOG_DIR"
 logger "CSV_DIR: $CSV_DIR"
 logger "TODAY: $TODAY"
 logger "LOG_NAME: $LOG_NAME"
+logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 実処理 ###
 # csvディレクトリ直下に、今日の日付ディレクトリを作成する

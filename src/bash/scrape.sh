@@ -25,7 +25,7 @@ logger() {
     msg=$1
 
     now_date=$(date '+%Y-%m-%d %T')
-    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME 
+    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME.txt
 }
 
 # 処理開始用関数
@@ -69,7 +69,7 @@ logger "TMP_DIR: $TMP_DIR"
 logger "YYYYMMDD: $YYYYMMDD"
 logger "HHMMSS: $HHMMSS"
 logger "LOG_NAME: $LOG_NAME"
-logger "output_log_file: $LOG_DIR/bash/$LOG_NAME"
+logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 変数セット ###
 readonly search_word1=$(sed -n '1p' $TMP_DIR/${YYYYMMDD}_*.txt)

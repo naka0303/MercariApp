@@ -97,7 +97,9 @@ python3 $SRC_DIR/py/scrape.py $search_word1 $search_word2 $search_word3 $status 
 # スクレイピング後のcsvディレクトリ下の総ファイル数取得
 readonly after_csv_num=$(ls $CSV_DIR | wc -l)
 
-if [ $after_csv_num-$before_csv_num -ne 1 ]; then
+diff_csv_num=$(expr $after_csv_num - $before_csv_num)
+
+if [ $diff_csv_num -ne 1 ]; then
     ### 処理異常終了 ###
     abend
 fi

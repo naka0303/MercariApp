@@ -25,7 +25,6 @@ class CsvFiler:
         all_idx_name_price_img_removed = []
         idx = 0
         for idx_name_price_img in all_idx_name_price_img:
-            print(idx_name_price_img)
             name = idx_name_price_img[1]
 
             # 検索ワードが商品名にあるかチェック

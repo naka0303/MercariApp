@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-11-23
-# UPDATE: 2023-01-04
+# UPDATE: 2023-01-08
 # PURPOSE:
 #   - 検索文字列入力フォームを生成し、その文字列を受け取る
 #   - メルカリ画面のスクレイピングをし、取得した商品情報をスプレッドシートに出力する
@@ -72,11 +72,12 @@ logger "LOG_NAME: $LOG_NAME"
 logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 変数セット ###
-readonly search_word1=$(sed -n '1p' $TMP_DIR/${YYYYMMDD}_*.txt)
-readonly search_word2=$(sed -n '2p' $TMP_DIR/${YYYYMMDD}_*.txt)
-readonly search_word3=$(sed -n '3p' $TMP_DIR/${YYYYMMDD}_*.txt)
-readonly status=$(sed -n '4p' $TMP_DIR/${YYYYMMDD}_*.txt)
-readonly sort_order=$(sed -n '5p' $TMP_DIR/${YYYYMMDD}_*.txt)
+readonly newest_txt=$(ls -rt $TMP_DIR/* | tail -n 1)
+readonly search_word1=$(sed -n '1p' $newest_txt)
+readonly search_word2=$(sed -n '2p' $newest_txt)
+readonly search_word3=$(sed -n '3p' $newest_txt)
+readonly status=$(sed -n '4p' $newest_txt)
+readonly sort_order=$(sed -n '5p' $newest_txt)
 
 ### 変数確認 ###
 logger "search_word1: $search_word1"
@@ -85,10 +86,22 @@ logger "search_word3: $search_word3"
 logger "status: $status"
 logger "sort_order: $sort_order"
 
+# スクレイピング前のcsvディレクトリ下の総ファイル数取得
+readonly before_csv_num=$(ls $CSV_DIR | wc -l)
+
 # メルカリ画面のスクレイピングを行い、インデックス番号と価格と商品名と画像URLのリストをCSVに出力する
 # FIXME: serch_wordは、3つ未満でも実行できるようにする
 logger "[EXEC] scrape.py"
 python3 $SRC_DIR/py/scrape.py $search_word1 $search_word2 $search_word3 $status $sort_order
+
+# スクレイピング後のcsvディレクトリ下の総ファイル数取得
+readonly after_csv_num=$(ls $CSV_DIR | wc -l)
+
+if [ $after_csv_num-$before_csv_num -ne 1 ]; then
+    ### 処理異常終了 ###
+    abend
+fi
+
 logger "[END] scrape.py"
 
 # tmpディレクトリのファイルを全削除

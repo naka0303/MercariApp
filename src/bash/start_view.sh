@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-12-18
-# UPDATE: 2023-01-04
+# UPDATE: 2023-01-08
 # PURPOSE:
 #   - 検索文字列入力フォームを生成し、その文字列を受け取りファイルに出力
 # USAGE:
@@ -65,7 +65,7 @@ logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 検索文字列入力フォームを生成し、その文字列を受け取りファイルに出力 ###
 #     ex) output_file_name: 2022-12-18_12-12-1671297826.txt
-logger "run start_view.py"
+logger "[EXEC] start_view.py"
 python3 $SRC_DIR/py/start_view.py $YYYYMMDD $HHMMSS
 
 # tmp下にファイルが出力されたか確認
@@ -73,7 +73,9 @@ readonly txt_num=$(ls $TMP_DIR | grep -e $YYYYMMDD | grep -e $HHMMSS | wc -l)
 if [ $txt_num -eq 0 ]; then
     ### 処理異常終了 ###
     abend
-else
-    ### 処理正常終了 ###
-    normal_end
 fi
+
+logger "[END] start_view.py"
+
+### 処理正常終了 ###
+normal_end

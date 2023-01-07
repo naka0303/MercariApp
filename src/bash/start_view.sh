@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-12-18
+# UPDATE: 2023-01-04
 # PURPOSE:
 #   - 検索文字列入力フォームを生成し、その文字列を受け取りファイルに出力
 # USAGE:
@@ -10,9 +11,9 @@
 
 
 ### 変数宣言 ###
-readonly APP_DIR=$(cd $(dirname $0); cd ../../../; pwd)
+readonly APP_DIR=$(cd $(dirname $0); cd ../../; pwd)
 readonly SCRIPT_NAME=$(basename $0)
-readonly LOG_DIR=$(cd $APP_DIR/logs; pwd)
+readonly LOG_DIR=$(cd $APP_DIR/logs/; pwd)
 readonly SRC_DIR=$(cd $APP_DIR/src; pwd)
 readonly TMP_DIR=$(cd $APP_DIR/tmp; pwd)
 readonly YYYYMMDD=$(date '+%Y-%m-%d')
@@ -65,10 +66,10 @@ logger "output_log_file: $LOG_DIR/bash/$LOG_NAME"
 ### 検索文字列入力フォームを生成し、その文字列を受け取りファイルに出力 ###
 #     ex) output_file_name: 2022-12-18_12-12-1671297826.txt
 logger "run start_view.py"
-python3 $SRC_DIR/py/displaying/start_view.py $YYYYMMDD $HHMMSS
+python3 $SRC_DIR/py/start_view.py $YYYYMMDD $HHMMSS
 
 # tmp下にファイルが出力されたか確認
-readonly txt_num=$(ls $TMP_DIR/${YYYYMMDD}_${HHMMSS}.txt | wc -l)
+readonly txt_num=$(ls $TMP_DIR | grep -e $YYYYMMDD | grep -e $HHMMSS | wc -l)
 if [ $txt_num -eq 0 ]; then
     ### 処理異常終了 ###
     abend

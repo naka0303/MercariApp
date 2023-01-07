@@ -63,13 +63,13 @@ class MakeGraph:
 
         self.log_outputter.info(msg, self.LOG_FILE)
 
-    def make_price_list(self):
+    def make_price_list(self, csv_file):
         """
         CSVファイルから、価格の昇順にした配列を作成する
         """
 
         prices = []
-        with open(args[1] + '.csv', 'r') as f:
+        with open(csv_file + '.csv', 'r') as f:
             reader = csv.reader(f)
             for r in reader:
                 prices.append(int(r[2]))
@@ -145,6 +145,8 @@ if __name__ == '__main__':
         # インスタンス生成
         make_graph = MakeGraph()
 
+        make_graph.output_log('========== START APP ==========')
+
         # 引数チェック
         args = sys.argv
         if (len(args) == 2):
@@ -152,7 +154,9 @@ if __name__ == '__main__':
         else:
             raise Exception
 
-        make_graph.output_log('========== START APP ==========')
+        # 引数セット
+        csv_file = args[1]
+
         make_graph.output_log('RUNTIME: ' + str(make_graph.DT_NOW))
         make_graph.output_log('APP_DIR_PATH: ' + make_graph.APP_DIR_PATH)
         make_graph.output_log('SRC_DIR_PATH: ' + make_graph.SRC_DIR_PATH)
@@ -162,7 +166,7 @@ if __name__ == '__main__':
         make_graph.output_log('OUTPUT_LOG_PATH: ' + make_graph.LOGS_DIR_PATH + '/' + make_graph.LOG_FILE)
 
         # CSVファイルから、価格の昇順にした配列を作成する
-        prices_sorted = make_graph.make_price_list()
+        prices_sorted = make_graph.make_price_list(csv_file)
 
         # 昇順にした価格リストから、最低価格と最高価格を取得した後、最高価格と最低価格の差を取得する
         price_diff = make_graph.get_price_diff(prices_sorted)

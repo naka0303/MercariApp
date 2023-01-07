@@ -20,27 +20,23 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;なお、他verでの動作保証なし
 
 # USAGE
-## 検索文字列入力フォームの表示
-  ```
-  cd src/py/
-  python3 start_view.py <arg1> <arg2>; echo $?
-  ```
-  ※ このスクリプトはrun.shから呼び出す前提
-
-## メルカリ画面スクレイピング実行、商品情報スプレッドシート出力
-  ```
-  cd src/py/
-  python3 main.py <arg1> <arg2> <arg3>; echo $?
-  ```
-  ※1 このスクリプトは、単発実行、run.shからの呼び出しのどちらでも実行可能  
-  ※2 引数はメルカリでの検索キーワードで、最大3ワード入力可能
-
-## MercariApp実行シェル
-  ``` bash
+## 検索文字列入力フォーム生成実行
+  ```bash
   cd src/bash/
-  ./run.sh; echo $?
+  ./start_view.sh; echo $?
   ```
-  ※　このシェルでは、start_view.pyとmain.pyを呼び出す
+
+## スクレイピング実行
+  ```bash
+  cd src/bash/
+  ./scrape.sh; echo $?
+  ```
+
+## 価格・件数グラフ作成実行
+  ```bash
+  cd src/bash/
+  ./make_gragh.sh; echo $?
+  ```
 
 ## csvファイルの日別格納用シェル
 ``` bash

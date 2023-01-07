@@ -26,7 +26,7 @@ logger() {
     msg=$1
 
     now_date=$(date '+%Y-%m-%d %T')
-    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME 
+    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME.txt
 }
 
 # 処理開始用関数
@@ -61,7 +61,7 @@ logger "TMP_DIR: $TMP_DIR"
 logger "YYYYMMDD: $YYYYMMDD"
 logger "HHMMSS: $HHMMSS"
 logger "LOG_NAME: $LOG_NAME"
-logger "output_log_file: $LOG_DIR/bash/$LOG_NAME"
+logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 検索文字列入力フォームを生成し、その文字列を受け取りファイルに出力 ###
 #     ex) output_file_name: 2022-12-18_12-12-1671297826.txt

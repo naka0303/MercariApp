@@ -25,7 +25,7 @@ logger() {
     msg=$1
 
     now_date=$(date '+%Y-%m-%d %T')
-    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME 
+    echo $now_date $msg >> $LOG_DIR/bash/$LOG_NAME.txt
 }
 
 # 処理開始用関数
@@ -66,7 +66,7 @@ logger "SRC_DIR: $SRC_DIR"
 logger "GRAPH_DIR: $GRAPH_DIR"
 logger "LOG_NAME: $LOG_NAME"
 logger "CSV_FILE: $CSV_FILE"
-logger "output_log_file: $LOG_DIR/bash/$LOG_NAME"
+logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 引数で指定したcsvファイルのグラフを作成する ###
 python3 $SRC_DIR/py/graphing/make_graph.py $CSV_DIR/$CSV_FILE

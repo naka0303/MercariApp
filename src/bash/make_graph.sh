@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-12-15
-# UPDATE: 2022-12-20
+# UPDATE: 2023-01-08
 # PURPOSE:
 #   - 引数で指定したcsvファイルのグラフを作成する
 # USAGE:
@@ -69,14 +69,14 @@ logger "CSV_FILE: $CSV_FILE"
 logger "output_log_file: $LOG_DIR/bash/$LOG_NAME.txt"
 
 ### 引数で指定したcsvファイルのグラフを作成する ###
-python3 $SRC_DIR/py/graphing/make_graph.py $CSV_DIR/$CSV_FILE
+python3 $SRC_DIR/py/make_graph.py $CSV_DIR/$CSV_FILE
 
 # graph下にグラフ画像が保存されたか確認
 readonly jpeg_num=$(ls $GRAPH_DIR/$CSV_FILE.jpeg | wc -l)
 if [ $jpeg_num -eq 0 ]; then
     ### 処理異常終了 ###
     abend
-else
-    ### 処理正常終了 ###
-    normal_end
 fi
+
+### 処理正常終了 ###
+normal_end

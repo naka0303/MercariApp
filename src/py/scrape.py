@@ -106,7 +106,7 @@ class Scrape:
         # 販売状況
         # - 販売中 : status=on_sale
         # - 売り切れ : status=sold_out
-        status_str = 'status=on_sale' if status == 0 else 'status=sold_out'
+        status_str = 'status=on_sale' if status == '0' else 'status=sold_out'
     
         # 並び替え
         # - 新しい順 : order=desc&sort=created_time

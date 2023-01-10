@@ -91,11 +91,14 @@ class Scrape:
         # スプレッドシート書き込み
         # spreadsheeter.make_sheet(OAUTH_DIR_PATH, yyyymmddhhmmss, all_idx_name_price_img_removed)
 
-    def run(self, driver, search_word1, search_word2, search_word3, status, sort_order):
+    def make_url(self, search_word1, search_word2, search_word3, status, sort_order, page_num):
         """
-        メルカリ画面のスクレイピング実行
+        メルカリURL作成
 
         """
+        
+        # ページ番号
+        page_num = str(page_num)
 
         # 検索ワード
         search_words = '%20'.join([search_word1, search_word2, search_word3])
@@ -122,13 +125,24 @@ class Scrape:
             sort_order_str = 'sort=price&order=desc'
         else:
             sort_order_str = 'order=desc&sort=num_likes'
-            
+        
+        self.output_log('PAGE_NUM: ' + page_num)
         self.output_log('SEARCH_WORD: ' + search_words)
         self.output_log('STATUS: ' + status_str)
         self.output_log('SORT_ORDER: ' + sort_order_str)
 
+        mercari_url = "https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str + "&page_token=v1%3A" + page_num
+
+        return mercari_url
+
+    def run(self, driver, search_word1, search_word2, search_word3, mercari_url):
+        """
+        メルカリ画面のスクレイピング実行
+
+        """
+
         # メルカリ公式サイトを開く
-        driver.get("https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str)
+        driver.get(mercari_url)
 
         # 出品商品情報取得
         driver.implicitly_wait(self.SLEEP_TIME)
@@ -167,9 +181,7 @@ class Scrape:
         self.log_outputter.info('PRODUCT_COUNT: ' + str(len(idx_name_price_img_removed)), self.LOG_FILE)
 
         # 全商品情報をcsvに出力
-        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, idx_name_price_img_removed, 'w')
-
-        return idx_name_price_img
+        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, idx_name_price_img_removed, 'a')
 
     def main():
         try:
@@ -217,11 +229,13 @@ class Scrape:
                 import chromedriver_binary
                 driver = webdriver.Chrome(options=options)
 
-            # メルカリ画面のスクレイピング実行
-            idx_name_price_img = scrape.run(driver, search_word1, search_word2, search_word3, status, sort_order)
+            for page_num in range(3):
+                # メルカリURL作成
+                mercari_url = scrape.make_url(search_word1, search_word2, search_word3, status, sort_order, page_num)
+                print(mercari_url)
 
-            # スクレイピングで取得した商品情報をCSVに出力する
-            scrape.output_csv(idx_name_price_img, search_word1, search_word2, search_word3)
+                # メルカリ画面のスクレイピング実行
+                scrape.run(driver, search_word1, search_word2, search_word3, mercari_url)
 
             driver.close()
 

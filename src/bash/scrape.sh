@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-11-23
-# UPDATE: 2023-01-08
+# UPDATE: 2023-01-09
 # PURPOSE:
 #   - 検索文字列入力フォームを生成し、その文字列を受け取る
 #   - メルカリ画面のスクレイピングをし、取得した商品情報をスプレッドシートに出力する
@@ -37,27 +37,19 @@ start() {
 # 処理正常終了用関数
 normal_end() {
     logger "========== NORMAL END =========="
-    return 0
+    exit 0
 }
 
 # 処理異常終了用完了
 abend() {
     logger "========== ABEND =========="
-    logger "${YYYYMMDD}_make_graph.py_log.txtを確認"
+    logger "${YYYYMMDD}_scrape.py_log.txtを確認"
     logger "==========================="
-    return 1
+    exit 1
 }
 
 ### 処理開始 ###
 start $SCRIPT_NAME
-
-### 引数確認 ###
-if [ $# = 0 ]; then
-    logger "========== ABEND =========="
-    logger "引数エラー"
-    logger "==========================="
-    abend
-fi
 
 ### 変数確認 ###
 logger "APP_DIR: $APP_DIR"

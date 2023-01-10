@@ -113,7 +113,7 @@ class StartView:
         status_btn2.place(x=150, y=190)
 
         # 並び替え選択ラジオボタン生成
-        label6 = tk.Label(text='■ 販売状況')
+        label6 = tk.Label(text='■ 並び替え')
         label6.place(x=30, y=220)
         self.var2 = tk.IntVar(0)
         self.var2.set(2)
@@ -188,12 +188,6 @@ if __name__ == '__main__':
     
         # 検索文字列入力フォームを作成する
         start_view.make_input_form(yyyymmdd, hhmmss)
-
-        # 検索文字列をテキストに出力する
-        # start_view.output_search_condition(yyyymmdd, hhmmss, var1, var2, search_word1, search_word2, search_word3)
-
-        # ウィンドウの表示を終了する
-        # start_view.end(self.root)
 
         # 処理時間計測終了
         END = time.perf_counter()

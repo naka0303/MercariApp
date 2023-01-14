@@ -21,19 +21,19 @@ class CsvFiler:
                 writer.writerow(data)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-    def remove_unneeded(self, args, all_idx_name_price_img):
-        all_idx_name_price_img_removed = []
+    def remove_unneeded(self, args, all_name_price_img):
+        all_name_price_img_removed = []
         idx = 0
-        for idx_name_price_img in all_idx_name_price_img:
-            name = idx_name_price_img[1]
+        for name_price_img in all_name_price_img:
+            name = name_price_img[0]
 
             # 検索ワードが商品名にあるかチェック
             none_cnt = len([arg for arg in args if not arg in name])
             
             # 検索ワード全てが商品名にある場合のみ返す
             if none_cnt == 0:
-                all_idx_name_price_img_removed.append(idx_name_price_img)
+                all_name_price_img_removed.append(name_price_img)
 
             idx += 1
         
-        return all_idx_name_price_img_removed
+        return all_name_price_img_removed

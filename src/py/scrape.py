@@ -169,7 +169,7 @@ class Scrape:
         # 商品名と価格を商品ごとに結合
         name_price_img = list(zip(name_list, price_list, img_list))
 
-        search_words = [search_word1, search_word2, search_word3]
+        search_words = [w for w in [search_word1, search_word2, search_word3] if w != 'None']
 
         # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
         name_price_img_removed = self.csv_filer.remove_unneeded(search_words[0:], name_price_img)

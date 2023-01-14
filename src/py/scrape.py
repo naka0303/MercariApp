@@ -73,7 +73,7 @@ class Scrape:
 
         self.log_outputter.info(msg, self.LOG_FILE)
 
-    def output_csv(self, idx_name_price_img, search_word1, search_word2, search_word3):
+    def output_csv(self, name_price_img, search_word1, search_word2, search_word3):
         """
         CSVに商品情報を出力する
         
@@ -82,11 +82,11 @@ class Scrape:
         search_words = [search_word1, search_word2, search_word3]
 
         # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-        idx_name_price_img_removed = self.csv_filer.remove_unneeded(search_words[0:], idx_name_price_img)
-        self.log_outputter.info('PRODUCT_COUNT: ' + str(len(idx_name_price_img_removed)), self.LOG_FILE)
+        all_name_price_img_removed = self.csv_filer.remove_unneeded(search_words[0:], name_price_img)
+        self.log_outputter.info('PRODUCT_COUNT: ' + str(len(all_name_price_img_removed)), self.LOG_FILE)
 
         # 全商品情報をcsvに出力
-        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, idx_name_price_img_removed, 'w')
+        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, all_name_price_img_removed, 'w')
 
         # スプレッドシート書き込み
         # spreadsheeter.make_sheet(OAUTH_DIR_PATH, yyyymmddhhmmss, all_idx_name_price_img_removed)
@@ -101,7 +101,7 @@ class Scrape:
         page_num = str(page_num)
 
         # 検索ワード
-        search_words = '%20'.join([search_word1, search_word2, search_word3])
+        search_words = '%20'.join([w for w in [search_word1, search_word2, search_word3] if w != 'None'])
 
         # 販売状況
         # - 販売中 : status=on_sale
@@ -132,7 +132,6 @@ class Scrape:
         self.output_log('SORT_ORDER: ' + sort_order_str)
 
         mercari_url = "https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str + "&page_token=v1%3A" + page_num
-        print(mercari_url)
 
         return mercari_url
 
@@ -191,6 +190,7 @@ class Scrape:
 
             # 引数チェック
             args = sys.argv
+            print(args)
             if (len(args) == 6):
                 scrape.output_log('ARG1: ' + str(args[1]))
                 scrape.output_log('ARG2: ' + str(args[2]))

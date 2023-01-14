@@ -5,9 +5,6 @@ import tkinter as tk
 import traceback
 import sys
 import os
-# os.chdir('../../')
-# sys.path.append(os.getcwd() + '/py/loggings/')
-# sys.path.append(os.getcwd() + '/py/dating/')
 import log_outputter
 import date_formatter
 
@@ -140,12 +137,20 @@ class StartView:
 
         """
 
-        search_words = [self.search_word1.get(), self.search_word2.get(), self.search_word3.get()]
+        search_words = []
+        l_search_word1 = self.search_word1.get()
+        l_search_word2 = self.search_word2.get()
+        l_search_word3 = self.search_word3.get()
+        search_words = [l_search_word1, l_search_word2, l_search_word3]
+
         with open(self.TMP_DIR_PATH + '/' + yyyymmdd + '_' + hhmmss + '.txt', 'w') as f:
+            f.write('検索ワード1 ' + '検索ワード2 ' + '検索ワード3 ' + '販売状況 ' + '並び替え' + '\n')
             for search_word in search_words:
-                f.write(search_word + '\n')
-            f.write(str(self.var1.get()) + '\n')
-            f.write(str(self.var2.get()))
+                if len(search_word) != 0:
+                    f.write(search_word + ' ')
+                else:
+                    f.write('None' + ' ')
+            f.write(str(self.var1.get()) + ' ' + str(self.var2.get()))
 
         self.end()
 

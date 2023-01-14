@@ -22,7 +22,7 @@ class Scrape:
     DT_NOW = datetime.datetime.now()
 
     # スクレイピング時の要素探索最大待機時間
-    SLEEP_TIME = 40
+    SLEEP_TIME = 60
 
     # 実行ホスト確認
     HOSTNAME = socket.gethostname()
@@ -190,7 +190,7 @@ class Scrape:
 
             # 引数チェック
             args = sys.argv
-            print(args)
+
             if (len(args) == 6):
                 scrape.output_log('ARG1: ' + str(args[1]))
                 scrape.output_log('ARG2: ' + str(args[2]))

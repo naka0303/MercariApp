@@ -1,7 +1,7 @@
 # REQUIREMENTS
 ## ローカル実行
   - chromedriverをインストールしておくこと  
-    ※ verは「107.0.5304.62」にし、Google Chromeのverは「107.0.5304.110」にすること  
+    ※ Google Chromeとのverを同じにすること  
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;なお、他verでの動作保証なし
   - 以下ディレクトリをMercariApp直下に作成すること
     - logs (ログ格納先)

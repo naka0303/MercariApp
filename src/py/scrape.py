@@ -22,7 +22,7 @@ class Scrape:
     DT_NOW = datetime.datetime.now()
 
     # スクレイピング時の要素探索最大待機時間
-    SLEEP_TIME = 20
+    SLEEP_TIME = 40
 
     # 実行ホスト確認
     HOSTNAME = socket.gethostname()
@@ -132,6 +132,7 @@ class Scrape:
         self.output_log('SORT_ORDER: ' + sort_order_str)
 
         mercari_url = "https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str + "&page_token=v1%3A" + page_num
+        print(mercari_url)
 
         return mercari_url
 
@@ -154,13 +155,10 @@ class Scrape:
         # 商品ごとに、商品名と価格と画像URLを取得する
         name_list = []
         price_list = []
-        idx_list = []
         img_list = []
-        idx = 1
         for product in products_div:
             product_detail = product.find_element(By.TAG_NAME, 'mer-item-thumbnail')
 
-            idx_list.append(idx)
             name = product_detail.get_attribute('alt')
             name_removed = name.replace('のサムネイル', '')
             name_list.append(name_removed)
@@ -169,19 +167,17 @@ class Scrape:
             img_url = product_detail.get_attribute('src-webp')
             img_list.append(img_url)
 
-            idx += 1
-
         # 商品名と価格を商品ごとに結合
-        idx_name_price_img = list(zip(idx_list, name_list, price_list, img_list))
+        name_price_img = list(zip(name_list, price_list, img_list))
 
         search_words = [search_word1, search_word2, search_word3]
 
         # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-        idx_name_price_img_removed = self.csv_filer.remove_unneeded(search_words[0:], idx_name_price_img)
-        self.log_outputter.info('PRODUCT_COUNT: ' + str(len(idx_name_price_img_removed)), self.LOG_FILE)
+        name_price_img_removed = self.csv_filer.remove_unneeded(search_words[0:], name_price_img)
+        self.log_outputter.info('PRODUCT_COUNT: ' + str(len(name_price_img_removed)), self.LOG_FILE)
 
         # 全商品情報をcsvに出力
-        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, idx_name_price_img_removed, 'a')
+        self.csv_filer.write_data(self.CSV_DIR_PATH, self.all_product_csv_file, name_price_img_removed, 'a')
 
     def main():
         try:
@@ -221,6 +217,7 @@ class Scrape:
             options = Options()
             options.headless = True
             if ('local' in scrape.HOSTNAME):
+                # FIXME: chromedriverに更新があれば自動で更新できるようにする
                 # chromedriverパス格納
                 driver_dir_path = scrape.APP_DIR_PATH + '/driver'
                 DRIVER_PATH = fs.Service(executable_path=driver_dir_path + '/chromedriver')
@@ -232,7 +229,6 @@ class Scrape:
             for page_num in range(3):
                 # メルカリURL作成
                 mercari_url = scrape.make_url(search_word1, search_word2, search_word3, status, sort_order, page_num)
-                print(mercari_url)
 
                 # メルカリ画面のスクレイピング実行
                 scrape.run(driver, search_word1, search_word2, search_word3, mercari_url)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DATE:   2022-12-15
-# UPDATE: 2023-01-08
+# UPDATE: 2023-01-21
 # PURPOSE:
 #   - 引数で指定したcsvファイルのグラフを作成する
 # USAGE:
@@ -9,7 +9,7 @@
 
 
 ### 変数宣言 ###
-readonly APP_DIR=$(cd $(dirname $0); cd ../../../; pwd)
+readonly APP_DIR=$(cd $(dirname $0); cd ../../; pwd)
 readonly SCRIPT_NAME=$(basename $0)
 readonly LOG_DIR=$(cd $APP_DIR/logs; pwd)
 readonly SRC_DIR=$(cd $APP_DIR/src; pwd)

@@ -9,7 +9,6 @@ import settings
 import log_outputter
 import date_formatter
 import time
-import datetime
 import traceback
 
 
@@ -26,7 +25,7 @@ class MakeGraph:
     APP_DIR_PATH = settings.APP_DIR_PATH
     SRC_DIR_PATH = settings.SRC_DIR_PATH
     CSV_DIR_PATH = settings.CSV_DIR_PATH
-    LOGS_DIR_PATH = settings.LOGS_DIR_PATH
+    PY_LOGS_DIR_PATH = settings.PY_LOGS_DIR_PATH
     GRAPH_DIR_PATH = settings.GRAPH_DIR_PATH
 
     # 実行ファイル名取得
@@ -34,7 +33,7 @@ class MakeGraph:
 
     def __init__(self):
         ### インスタンス生成 ###
-        self.log_outputter = log_outputter.LogOutputter(self.APP_DIR_PATH, self.LOGS_DIR_PATH, self.RUN_FILENAME)
+        self.log_outputter = log_outputter.LogOutputter(self.APP_DIR_PATH, self.PY_LOGS_DIR_PATH, self.RUN_FILENAME)
         self.date_formatter = date_formatter.DateFormatter()
 
         # 日時のフォーマットを任意の形式に変更
@@ -71,7 +70,7 @@ class MakeGraph:
         with open(csv_file + '.csv', 'r') as f:
             reader = csv.reader(f)
             for r in reader:
-                prices.append(int(r[2]))
+                prices.append(int(r[1]))
         
         prices_sorted = sorted(prices)
 
@@ -160,9 +159,9 @@ if __name__ == '__main__':
         make_graph.output_log('APP_DIR_PATH: ' + make_graph.APP_DIR_PATH)
         make_graph.output_log('SRC_DIR_PATH: ' + make_graph.SRC_DIR_PATH)
         make_graph.output_log('CSV_DIR_PATH: ' + make_graph.CSV_DIR_PATH)
-        make_graph.output_log('LOGS_DIR_PATH: ' + make_graph.LOGS_DIR_PATH)
+        make_graph.output_log('PY_LOGS_DIR_PATH: ' + make_graph.PY_LOGS_DIR_PATH)
         make_graph.output_log('GRAPH_DIR_PATH: ' + make_graph.GRAPH_DIR_PATH)
-        make_graph.output_log('OUTPUT_LOG_PATH: ' + make_graph.LOGS_DIR_PATH + '/' + make_graph.LOG_FILE)
+        make_graph.output_log('OUTPUT_LOG_PATH: ' + make_graph.PY_LOGS_DIR_PATH + '/' + make_graph.LOG_FILE)
 
         # CSVファイルから、価格の昇順にした配列を作成する
         prices_sorted = make_graph.make_price_list(csv_file)

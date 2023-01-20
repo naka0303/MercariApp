@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import os
 import sys
 os.chdir('../../')
-sys.path.append(os.getcwd() + '/py/loggings/')
-sys.path.append(os.getcwd() + '/py/dating/')
+sys.path.append(os.getcwd() + '/settings/')
+import settings
 import log_outputter
 import date_formatter
 import time
@@ -20,15 +20,14 @@ class MakeGraph:
 
     ### 変数宣言 ###
     # 現在時刻取得
-    DT_NOW = datetime.datetime.now()
+    DT_NOW = settings.DT_NOW
 
     # 各ディレクトリパス格納
-    os.chdir('../')
-    APP_DIR_PATH = os.getcwd()
-    SRC_DIR_PATH = APP_DIR_PATH + '/src'
-    CSV_DIR_PATH = APP_DIR_PATH + '/csv'
-    LOGS_DIR_PATH = APP_DIR_PATH + '/logs'
-    GRAPH_DIR_PATH = APP_DIR_PATH + '/graph'
+    APP_DIR_PATH = settings.APP_DIR_PATH
+    SRC_DIR_PATH = settings.SRC_DIR_PATH
+    CSV_DIR_PATH = settings.CSV_DIR_PATH
+    LOGS_DIR_PATH = settings.LOGS_DIR_PATH
+    GRAPH_DIR_PATH = settings.GRAPH_DIR_PATH
 
     # 実行ファイル名取得
     RUN_FILENAME = os.path.basename(__file__)

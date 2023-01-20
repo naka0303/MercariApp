@@ -1,16 +1,18 @@
-import datetime
 import os
-import socket
 import sys
 import time
 import traceback
 import log_outputter
 import date_formatter
 import csv_filer
+os.chdir('../../')
+sys.path.append(os.getcwd() + '/settings/')
+import settings
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.chrome.options import Options
+
 
 class Scrape:
     """
@@ -19,27 +21,26 @@ class Scrape:
 
     ### 変数宣言 ###
     # 現在時刻取得
-    DT_NOW = datetime.datetime.now()
+    DT_NOW = settings.DT_NOW
 
-    # スクレイピング時の要素探索最大待機時間
-    SLEEP_TIME = 60
+    # 要素探索待機時間
+    SLEEP_TIME = settings.SLEEP_TIME
 
-    # 実行ホスト確認
-    HOSTNAME = socket.gethostname()
+    # 実行ホスト
+    HOSTNAME = settings.HOSTNAME
 
-    # 各ディレクトリパス格納
-    os.chdir('../../')
-    APP_DIR_PATH = os.getcwd()
-    CSV_DIR_PATH = APP_DIR_PATH + '/csv'
-    LOGS_DIR_PATH = APP_DIR_PATH + '/logs/py'
+    # 各ディレクトリパス
+    APP_DIR_PATH = settings.APP_DIR_PATH
+    CSV_DIR_PATH = settings.CSV_DIR_PATH
+    PY_LOGS_DIR_PATH = settings.PY_LOGS_DIR_PATH
 
-    # 実行ファイル名取得
+    # 実行ファイル名
     RUN_FILENAME = os.path.basename(__file__)
 
     # コンストラクタ
     def __init__(self):
         ### インスタンス生成 ###
-        self.log_outputter = log_outputter.LogOutputter(self.APP_DIR_PATH, self.LOGS_DIR_PATH, self.RUN_FILENAME)
+        self.log_outputter = log_outputter.LogOutputter(self.APP_DIR_PATH, self.PY_LOGS_DIR_PATH, self.RUN_FILENAME)
         self.date_formatter = date_formatter.DateFormatter()
         self.csv_filer = csv_filer.CsvFiler()
 
@@ -96,9 +97,6 @@ class Scrape:
         メルカリURL作成
 
         """
-        
-        # ページ番号
-        page_num = str(page_num)
 
         # 検索ワード
         search_words = '%20'.join([w for w in [search_word1, search_word2, search_word3] if w != 'None'])
@@ -106,7 +104,7 @@ class Scrape:
         # 販売状況
         # - 販売中 : status=on_sale
         # - 売り切れ : status=sold_out
-        status_str = 'status=on_sale' if status == '0' else 'status=sold_out'
+        status_str = settings.STATUS_ON_SALE if status == '0' else settings.STATUS_SOLD_OUT
     
         # 並び替え
         # - 新しい順 : order=desc&sort=created_time
@@ -116,22 +114,21 @@ class Scrape:
         # - いいね順 : order=desc&sort=num_likes
         sort_order_str = ''
         if sort_order == '2':
-            sort_order_str = 'sort=score&order=desc'
+            sort_order_str = settings.SORT_CREATED_TIME
         elif sort_order == '3':
-            sort_order_str = 'sort=score&order=desc'
+            sort_order_str = settings.SORT_SCORE
         elif sort_order == '4':
-            sort_order_str = 'order=asc&sort=price'
+            sort_order_str = settings.SORT_PRICE_ASC
         elif sort_order == '5':
-            sort_order_str = 'sort=price&order=desc'
+            sort_order_str = settings.SORT_PRICE_DESC
         else:
-            sort_order_str = 'order=desc&sort=num_likes'
-        
-        self.output_log('PAGE_NUM: ' + page_num)
+            sort_order_str = settings.SORT_NUM_LIKES
+
         self.output_log('SEARCH_WORD: ' + search_words)
         self.output_log('STATUS: ' + status_str)
         self.output_log('SORT_ORDER: ' + sort_order_str)
 
-        mercari_url = "https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str + "&page_token=v1%3A" + page_num
+        mercari_url = "https://jp.mercari.com/search?keyword=" + search_words + "&" + sort_order_str + "&" + status_str + "&page_token=v1%3A" + str(page_num)
 
         return mercari_url
 
@@ -210,28 +207,32 @@ class Scrape:
             scrape.output_log('RUNTIME: ' + str(scrape.DT_NOW))
             scrape.output_log('HOSTNAME: ' + scrape.HOSTNAME)
             scrape.output_log('APP_DIR_PATH: ' + scrape.APP_DIR_PATH)
-            scrape.output_log('LOGS_DIR_PATH: ' + scrape.LOGS_DIR_PATH)
-            scrape.output_log('OUTPUT_LOG_PATH: ' + scrape.LOGS_DIR_PATH + '/' + scrape.LOG_FILE)
+            scrape.output_log('PY_LOGS_DIR_PATH: ' + scrape.PY_LOGS_DIR_PATH)
+            scrape.output_log('OUTPUT_LOG_PATH: ' + scrape.PY_LOGS_DIR_PATH + '/' + scrape.LOG_FILE)
 
-            driver_dir_path = ''
             options = Options()
             options.headless = True
             if ('local' in scrape.HOSTNAME):
                 # FIXME: chromedriverに更新があれば自動で更新できるようにする
                 # chromedriverパス格納
-                driver_dir_path = scrape.APP_DIR_PATH + '/driver'
-                DRIVER_PATH = fs.Service(executable_path=driver_dir_path + '/chromedriver')
-                driver = webdriver.Chrome(service=DRIVER_PATH, options=options)
+                driver_path= fs.Service(executable_path=settings.DRIVER_DIR_PATH + '/chromedriver')
+                driver = webdriver.Chrome(service=driver_path, options=options)
             else:
                 import chromedriver_binary
                 driver = webdriver.Chrome(options=options)
 
-            for page_num in range(3):
+            scrape.output_log('--------- 探索開始 ----------')
+
+            for page_num in range(settings.LOOP_NUM):
+                scrape.output_log('----- ' + str(page_num + 1) + 'ページ目' + ' -----')
+
                 # メルカリURL作成
                 mercari_url = scrape.make_url(search_word1, search_word2, search_word3, status, sort_order, page_num)
 
                 # メルカリ画面のスクレイピング実行
                 scrape.run(driver, search_word1, search_word2, search_word3, mercari_url)
+
+            scrape.output_log('--------- 探索終了 ----------')
 
             driver.close()
 

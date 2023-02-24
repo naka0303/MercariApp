@@ -15,29 +15,25 @@ class CsvFiler:
         with open(csv_path + '/' + csv_file, mode) as f:
             writer = csv.writer(f)
 
-            if ('all_product' in csv_file):
+            if 'all_product' in csv_file:
                 writer.writerows(data)
             else:
                 writer.writerow(data)
 
     # メルカリ画面から取得した商品名と価格の配列から不要情報を除去
-    def remove_unneeded(self, args, all_idx_name_price):
-        all_idx_name_price_removed = []
+    def remove_unneeded(self, args, all_name_price_img):
+        all_name_price_img_removed = []
         idx = 0
-        for idx_name_price in all_idx_name_price:
-            name = idx_name_price[1]
+        for name_price_img in all_name_price_img:
+            name = name_price_img[0]
 
             # 検索ワードが商品名にあるかチェック
-            none_cnt = 0
-            for arg in args:
-                if (arg in name):
-                    none_cnt += 1
-                    break
+            none_cnt = len([arg for arg in args if not arg in name])
             
-            # 検索ワード全てが商品名に無ければ配列から削除
-            if (none_cnt != 0):
-                all_idx_name_price_removed.append(idx_name_price)
+            # 検索ワード全てが商品名にある場合のみ返す
+            if none_cnt == 0:
+                all_name_price_img_removed.append(name_price_img)
 
             idx += 1
         
-        return all_idx_name_price_removed
+        return all_name_price_img_removed

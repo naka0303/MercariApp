@@ -76,7 +76,7 @@ readonly jpeg_num=$(ls $GRAPH_DIR/$CSV_FILE.jpeg | wc -l)
 if [ $jpeg_num -eq 0 ]; then
     ### 処理異常終了 ###
     abend
+else
+    ### 処理正常終了 ###
+    normal_end  
 fi
-
-### 処理正常終了 ###
-normal_end
